@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="3">
+      <Unit0>
+        <Filename Value="controls.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="3"/>
+        <CursorPos X="17" Y="1090"/>
+        <UsageCount Value="310"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="hb_main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AndroidModule1"/>
+        <HasResources Value="True"/>
+        <UnitName Value="HB_main"/>
+        <CustomData Count="1">
+          <Item0 Name="jControls" Value="jActionBarTab;jButton;jCheckBox;jCustomDialog;jDialogYN;jEditText;jForm;jGridView;jIntentManager;jListView;jPanel;jRadioGroup;jScrollView;jSqliteCursor;jSqliteDataAccess;jTextView"/>
+        </CustomData>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="406"/>
+        <CursorPos X="7" Y="418"/>
+        <UsageCount Value="310"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="densesolver.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="12"/>
+        <CursorPos X="171" Y="24"/>
+        <UsageCount Value="130"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit2>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1051" Column="44" TopLine="1038"/>
+      </Position1>
+      <Position2>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1050" Column="44" TopLine="1037"/>
+      </Position2>
+      <Position3>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1049" Column="44" TopLine="1036"/>
+      </Position3>
+      <Position4>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1048" Column="44" TopLine="1035"/>
+      </Position4>
+      <Position5>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1047" Column="44" TopLine="1034"/>
+      </Position5>
+      <Position6>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1046" Column="44" TopLine="1033"/>
+      </Position6>
+      <Position7>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1045" Column="44" TopLine="1032"/>
+      </Position7>
+      <Position8>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1044" Column="44" TopLine="1031"/>
+      </Position8>
+      <Position9>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1043" Column="44" TopLine="1030"/>
+      </Position9>
+      <Position10>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1042" Column="44" TopLine="1029"/>
+      </Position10>
+      <Position11>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1041" Column="44" TopLine="1028"/>
+      </Position11>
+      <Position12>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1040" Column="44" TopLine="1027"/>
+      </Position12>
+      <Position13>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1039" Column="44" TopLine="1026"/>
+      </Position13>
+      <Position14>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1038" Column="44" TopLine="1025"/>
+      </Position14>
+      <Position15>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1037" Column="44" TopLine="1024"/>
+      </Position15>
+      <Position16>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1036" Column="44" TopLine="1023"/>
+      </Position16>
+      <Position17>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1035" Column="44" TopLine="1022"/>
+      </Position17>
+      <Position18>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1076" Column="44" TopLine="1063"/>
+      </Position18>
+      <Position19>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1075" Column="44" TopLine="1062"/>
+      </Position19>
+      <Position20>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1076" Column="44" TopLine="1063"/>
+      </Position20>
+      <Position21>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1075" Column="44" TopLine="1062"/>
+      </Position21>
+      <Position22>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1082" Column="44" TopLine="1069"/>
+      </Position22>
+      <Position23>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="414" Column="3" TopLine="411"/>
+      </Position23>
+      <Position24>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="415" Column="3" TopLine="412"/>
+      </Position24>
+      <Position25>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="414" Column="3" TopLine="411"/>
+      </Position25>
+      <Position26>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="415" Column="3" TopLine="412"/>
+      </Position26>
+      <Position27>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="417" Column="35" TopLine="414"/>
+      </Position27>
+      <Position28>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="378" Column="3" TopLine="376"/>
+      </Position28>
+      <Position29>
+        <Filename Value="hb_main.pas"/>
+        <Caret Line="1082" Column="32" TopLine="1062"/>
+      </Position29>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

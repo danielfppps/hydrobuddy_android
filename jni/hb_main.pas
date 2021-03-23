@@ -11,16 +11,27 @@ uses
   {$ENDIF}{$ENDIF}
   Classes, SysUtils, AndroidWidget, Laz_And_Controls, And_jni, windowmanager,
   actionbartab, customdialog, modaldialog, comboedittext, radiogroup, gridview,
-  intentmanager, densesolver, math;
+  intentmanager, menu, densesolver, math;
   
 type
 
   { TAndroidModule1 }
 
   TAndroidModule1 = class(jForm)
+    jButton13: jButton;
+    jButton14: jButton;
+    jButton15: jButton;
+    jDialogYN2: jDialogYN;
+    jEditText41: jEditText;
+    jEditText42: jEditText;
+    jDoFDialog: jCustomDialog;
+    jWQDialog: jCustomDialog;
+    WQIds: jListView;
     jActionBarTab1: jActionBarTab;
     jButton1: jButton;
     jButton10: jButton;
+    jButton11: jButton;
+    jButton12: jButton;
     jButton2: jButton;
     jButton3: jButton;
     jButton4: jButton;
@@ -52,7 +63,10 @@ type
     jEditText7: jEditText;
     jEditText8: jEditText;
     jEditText9: jEditText;
+    jWQView: jListView;
+    jPanel10: jPanel;
     jIntentManager1: jIntentManager;
+    jPanel11: jPanel;
     jPanel5: jPanel;
     jPanel6: jPanel;
     jPanel7: jPanel;
@@ -81,6 +95,7 @@ type
     jEditText38: jEditText;
     FormulationsView: jListView;
     jPanel4: jPanel;
+    jPanel9: jPanel;
     jRadioGroup1: jRadioGroup;
     jRadioGroup2: jRadioGroup;
     jResultsEditDialog: jCustomDialog;
@@ -122,11 +137,14 @@ type
     jTextView39: jTextView;
     FormulationsIds: jListView;
     jTextView4: jTextView;
+    jTextView40: jTextView;
+    jTextView41: jTextView;
     jTextView5: jTextView;
     jTextView6: jTextView;
     jTextView7: jTextView;
     jTextView8: jTextView;
     jTextView9: jTextView;
+    jWQGrid: jGridView;
     SubstancesView: jListView;
     jPanel1: jPanel;
     jPanel2: jPanel;
@@ -141,6 +159,11 @@ type
     procedure jActionBarTab1TabSelected(Sender: TObject; view: jObject;
       title: string);
     procedure jButton10Click(Sender: TObject);
+    procedure jButton11Click(Sender: TObject);
+    procedure jButton12Click(Sender: TObject);
+    procedure jButton13Click(Sender: TObject);
+    procedure jButton14Click(Sender: TObject);
+    procedure jButton15Click(Sender: TObject);
     procedure jButton1Click(Sender: TObject);
     procedure AndroidModule1JNIPrompt(Sender: TObject);
     procedure jButton2Click(Sender: TObject);
@@ -152,6 +175,7 @@ type
     procedure jButton8Click(Sender: TObject);
     procedure jButton9Click(Sender: TObject);
     procedure jDialogYN1ClickYN(Sender: TObject; YN: TClickYN);
+    procedure jDialogYN2ClickYN(Sender: TObject; YN: TClickYN);
     procedure jPanel1FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jPanel2FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jPanel3FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
@@ -164,6 +188,12 @@ type
       itemCaption: string);
     procedure jTextView32Click(Sender: TObject);
     procedure jTextView38Click(Sender: TObject);
+    procedure jWQGridClickItem(Sender: TObject; ItemIndex: integer;
+      itemCaption: string);
+    procedure jWQViewClickItem(Sender: TObject; itemIndex: integer;
+      itemCaption: string);
+    procedure jWQViewLongClickItem(Sender: TObject; itemIndex: integer;
+      itemCaption: string);
     procedure SubstancesViewClickItem(Sender: TObject; itemIndex: integer;
       itemCaption: string);
     procedure SubstancesViewLongClickItem(Sender: TObject; itemIndex: integer;
@@ -176,6 +206,8 @@ type
     selected_substance_id, selected_formulation_id : integer;
     degree_of_freedom: String;
     selected_col, selected_row: integer;
+    selected_water_quality_id: integer;
+    wq_dialog_mode: integer;
     const
     elements : array[0..15] of string =
     (
@@ -222,6 +254,7 @@ type
   procedure UpdateSubstances();
   procedure UpdateFormulations();
   procedure UpdateResults();
+  procedure UpdateWaterQuality(load_default:Boolean);
   function round2(const Number: extended; const Places: longint): extended;
 
   end;
@@ -248,16 +281,19 @@ procedure TAndroidModule1.AndroidModule1JNIPrompt(Sender: TObject);
 begin
     Self.SetIconActionBar('ic_bullets');
     jActionBarTab1.Add('Intro', jPanel7.View{sheet view}, 'ic_bullet_green');
-    jActionBarTab1.Add('Inputs', jPanel1.View{sheet view}, 'ic_bullet_green');    // ...\res\drawable-xxx
-    jActionBarTab1.Add('Substances', jPanel2.View {sheet view}, 'ic_bullet_yellow'); //...\res\drawable-xxx
-    jActionBarTab1.Add('Formulations', jPanel3.View {sheet view}, 'ic_bullet_yellow'); //...\res\drawable-xxx
-    jActionBarTab1.Add('Results', jPanel4.View{sheet view},'ic_bullet_red');
-    jActionBarTab1.Add('Results (by element)', jPanel8.View{sheet view},'ic_bullet_red');
+    jActionBarTab1.Add('Inputs', jPanel1.View{sheet view}, 'ic_bullet_green');
+    jActionBarTab1.Add('Substances', jPanel2.View {sheet view}, 'ic_bullet_yellow');
+    jActionBarTab1.Add('Formulations', jPanel3.View {sheet view}, 'ic_bullet_yellow');
+    jActionBarTab1.Add('Water Quality', jPanel9.View {sheet view}, 'ic_bullet_yellow');
+    jActionBarTab1.Add('Results inputs', jPanel4.View{sheet view},'ic_bullet_red');
+    jActionBarTab1.Add('Results elements', jPanel8.View{sheet view},'ic_bullet_red');
     Self.SetTabNavigationModeActionBar;  //this is needed!!!
 
+    UpdateWaterQuality(True);
     jRadioGroup1.CheckedIndex := 0;
     jRadioGroup2.CheckedIndex := 0;
     degree_of_freedom := 'S';
+
 end;
 
 procedure TAndroidModule1.jButton2Click(Sender: TObject);
@@ -427,6 +463,15 @@ begin
   end;
 end;
 
+procedure TAndroidModule1.jDialogYN2ClickYN(Sender: TObject; YN: TClickYN);
+begin
+   if YN = clickYes then
+  begin
+     jSqliteDataAccess1.DeleteFromTable('DELETE FROM water_quality WHERE water_quality_id=' + IntToStr(selected_water_quality_id));
+     UpdateWaterQuality(False);
+  end;
+end;
+
 procedure TAndroidModule1.jPanel1FlingGesture(Sender: TObject;
   flingGesture: TFlingGesture);
 begin
@@ -536,6 +581,40 @@ begin
      jIntentManager1.StartActivity();
    end
 
+end;
+
+procedure TAndroidModule1.jWQGridClickItem(Sender: TObject; ItemIndex: integer;
+  itemCaption: string);
+var
+  col, row: integer;
+begin
+  jWQGrid.IndexToCoord(ItemIndex, col, row);
+  if (col = 1) and (row > 0) then
+  begin
+       wq_dialog_mode := row;
+       jEditText41.Text := jWQGrid.Cells[col, row];
+       jWQDialog.Show();
+  end;
+
+end;
+
+procedure TAndroidModule1.jWQViewClickItem(Sender: TObject; itemIndex: integer;
+  itemCaption: string);
+var
+  i: integer;
+begin
+  selected_water_quality_id := StrtoInt(WQIds.Items[itemIndex]);
+  jSqliteDataAccess1.Select('SELECT * FROM water_quality WHERE water_quality_id=' + WQIds.Items[itemIndex], false);
+  sqlCursor.MoveToFirst;
+  for i := 0 to 15 do jWQGrid.Cells[1,i+1] := sqlCursor.GetValueToString(elements[i]);
+end;
+
+procedure TAndroidModule1.jWQViewLongClickItem(Sender: TObject;
+  itemIndex: integer; itemCaption: string);
+begin
+      selected_water_quality_id := StrToInt(WQIds.Items[itemIndex]);
+      jDialogYN2.Msg := 'Delete water quality parameters "' + jWQView.Items[itemIndex] + '" ?';
+      jDialogYN2.Show();
 end;
 
 
@@ -649,27 +728,24 @@ procedure TAndroidModule1.UpdateResults();
 var
   i, j: integer;
   volume: double;
-  name_array: array of array of string;
   Result: array of double;
   all_element_contributions : array of array of double ;
   total_ppm_contribution_for_element: double;
   all_element_targets: array of double;
   conc_factor: double;
   arraysize: integer;
+  mass_of_salt: double;
 
   begin
 
       // variable initializations
       all_element_contributions := nil;
-      name_array := nil ;
       arraysize := 0;
       volume := StrToFloat(jEditText36.Text);
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
 
       SetLength(all_element_targets, 16);
-
-      j := 0;
 
       for i := 0 to 15 do
       begin
@@ -702,8 +778,6 @@ var
            sqlCursor.MoveToNext;
       end;
 
-
-      SetLength(name_array, arraysize, 1);
       SetLength(all_element_contributions, 16, arraysize);
       SetLength(Result, 16);
 
@@ -723,8 +797,6 @@ var
       sqlCursor.MoveToFirst;
       while not sqlCursor.EOF do
       begin
-           name_array[i][0] := sqlCursor.GetValueToString('Name');
-
            for j := 0 to 15 do
            begin
                 all_element_contributions[j][i] := 0.01 * StrToFloat(sqlCursor.GetValueToString(elements[j])) * StrToFloat(sqlCursor.GetValueToString('Purity')) / volume;
@@ -737,21 +809,18 @@ var
     for i := 0 to 15 do
     begin
 
-         total_ppm_contribution_for_element  := 0;
+         total_ppm_contribution_for_element  := StrToFloat(jWQGrid.Cells[1,i+1]);;
 
          for j := 0 to arraysize - 1 do
          begin
-
-              if (StrToFloat(jResultsGrid.Cells[1, j+1]) > 0)then
+              mass_of_salt := StrToFloat(jResultsGrid.Cells[1, j+1]);
+              if ( mass_of_salt > 0) then
               begin
-              if jRadioGroup2.CheckedIndex = 0 then total_ppm_contribution_for_element  := StrToFloat(jResultsGrid.Cells[1, j+1]) * all_element_contributions[i][j] + total_ppm_contribution_for_element;
-              if jRadioGroup2.CheckedIndex = 1 then total_ppm_contribution_for_element  := (StrToFloat(jResultsGrid.Cells[1, j+1])/conc_factor) * all_element_contributions[i][j] + total_ppm_contribution_for_element;
+                   if jRadioGroup2.CheckedIndex = 0 then total_ppm_contribution_for_element  := mass_of_salt * all_element_contributions[i][j] + total_ppm_contribution_for_element;
+                   if jRadioGroup2.CheckedIndex = 1 then total_ppm_contribution_for_element  := (mass_of_salt/conc_factor) * all_element_contributions[i][j] + total_ppm_contribution_for_element;
               end;
-
          end;
-
          Result[i] := total_ppm_contribution_for_element;
-
     end;
 
     jResultsGrid2.Cells[0,0] := 'Element';
@@ -769,6 +838,8 @@ var
       jResultsGrid2.Cells[2,i+1] := '0';
 
     end;
+
+    jActionBarTab1.SelectTabByIndex(6);
 
 end;
 
@@ -834,6 +905,10 @@ var
                 if elements[i] = 'Na' then vartargetvalue[j] := StrToFloat(jEditText14.Text);
                 if elements[i] = 'Cl' then vartargetvalue[j] := StrToFloat(jEditText15.Text);
                 if elements[i] = 'Si' then vartargetvalue[j] := StrToFloat(jEditText16.Text);
+
+                // adjust for water quality
+                if (vartargetvalue[j] - StrToFloat(jWQGrid.Cells[1,i+1]) < 0) then vartargetvalue[j] := 0 else vartargetvalue[j] := vartargetvalue[j]-StrToFloat(jWQGrid.Cells[1,i+1]);
+
                 j := j+1;
            end;
 
@@ -883,7 +958,7 @@ var
       SetLength(all_element_contributions, 16, arraysize);
       SetLength(Result, 16);
 
-      // initialize all element contributions
+      // initialize all jTextView40 contributions
       for i := 0 to arraysize - 1 do
       begin
            for j := 0 to 15 do
@@ -901,7 +976,7 @@ var
            end;
       end;
 
-      // This DB query is fill the problem matrix
+      // This DB query fills the problem matrix
       i := 0;
       jSqliteDataAccess1.Select('SELECT * FROM substances WHERE is_used=1', false);
       sqlCursor.MoveToFirst;
@@ -965,13 +1040,18 @@ var
              jResultsGrid.Cells[1,i+1] := (FloatToStr(round2(solutions[i] * conc_factor, 3)));
         end;
 
+      end else begin
+
+         jResultsGrid.Cells[0,i+1] := (name_array[i][0]);
+         jResultsGrid.Cells[1,i+1] := '0';
+
       end;
     end;
 
     for i := 0 to 15 do
     begin
 
-         total_ppm_contribution_for_element  := 0;
+         total_ppm_contribution_for_element  := StrToFloat(jWQGrid.Cells[1,i+1]);
 
          for j := 0 to arraysize - 1 do
          begin
@@ -1000,7 +1080,44 @@ var
 
     end;
 
-    jActionBarTab1.SelectTabByIndex(4);
+    jActionBarTab1.SelectTabByIndex(5);
+
+end;
+
+procedure TAndroidModule1.UpdateWaterQuality(load_default:Boolean);
+var
+  is_wq_loaded, i: integer;
+begin
+
+    jWQGrid.Cells[0,0] := 'Element';
+    jWQGrid.Cells[1,0] := 'Conc (ppm)';
+    is_wq_loaded := 0;
+    WQIds.Clear();
+    jWQView.Clear();
+
+    for i := 0 to 15 do jWQGrid.Cells[0,i+1] := elements[i];
+
+    jSqliteDataAccess1.Select('SELECT * FROM water_quality', false);
+    sqlCursor.MoveToFirst;
+
+    while not sqlCursor.EOF do
+    begin
+         if  (sqlCursor.GetValueToString('is_used') = '1') and load_default then
+         begin
+              is_wq_loaded := 1;
+              for i := 0 to 15 do jWQGrid.Cells[1,i+1] := sqlCursor.GetValueToString(elements[i]);
+              selected_water_quality_id := sqlCursor.GetValueAsInteger('water_quality_id');
+         end;
+
+         jWQView.Add(sqlCursor.GetValueToString('Name'));
+         WQIds.Add(sqlCursor.GetValueToString('water_quality_id'));
+         sqlCursor.MoveToNext;
+    end;
+
+    if (is_wq_loaded = 0) and load_default then
+    begin
+       for i := 0 to 15 do jWQGrid.Cells[1,i+1] := '0';
+    end;
 
 end;
 
@@ -1055,6 +1172,7 @@ procedure TAndroidModule1.jActionBarTab1TabSelected(Sender: TObject;
 begin
   if title = 'Substances' then UpdateSubstances;
   if title = 'Formulations' then UpdateFormulations;
+  if title = 'Water Quality' then UpdateWaterQuality(False);
 end;
 
 procedure TAndroidModule1.jButton10Click(Sender: TObject);
@@ -1078,6 +1196,66 @@ begin
                                      jEditText15.Text + ',' +
                                      jEditText16.Text + ')');
   jFormulationNameDialog.Close();
+end;
+
+procedure TAndroidModule1.jButton11Click(Sender: TObject);
+begin
+  wq_dialog_mode := 0;
+  jEditText41.Text := 'Enter name here';
+  jWQDialog.Show();
+end;
+
+procedure TAndroidModule1.jButton12Click(Sender: TObject);
+begin
+    jSqliteDataAccess1.UpdateTable('UPDATE water_quality SET is_used=0 WHERE water_quality_id > 0');
+    jSqliteDataAccess1.UpdateTable('UPDATE water_quality SET is_used=1 WHERE water_quality_id = ' + IntToStr(selected_water_quality_id));
+    UpdateWaterQuality(False);
+end;
+
+procedure TAndroidModule1.jButton13Click(Sender: TObject);
+begin
+
+  // are we adding something new to the DB
+  if wq_dialog_mode = 0 then
+  begin
+         jSqliteDataAccess1.InsertIntoTable('INSERT INTO water_quality (Name, is_used, N_NO3, N_NH4, P, K, Ca, Mg, S, Fe, Mn, B, Zn, Cu, Mo, Na, Cl, Si) VALUES ' +
+                                     '("' + jEditText41.Text + '",'+
+                                     '0,'+
+                                     jWQGrid.Cells[1,1] + ',' +
+                                     jWQGrid.Cells[1,2] + ',' +
+                                     jWQGrid.Cells[1,3] + ',' +
+                                     jWQGrid.Cells[1,4] + ',' +
+                                     jWQGrid.Cells[1,5] + ',' +
+                                     jWQGrid.Cells[1,6] + ',' +
+                                     jWQGrid.Cells[1,7] + ',' +
+                                     jWQGrid.Cells[1,8] + ',' +
+                                     jWQGrid.Cells[1,9] + ',' +
+                                     jWQGrid.Cells[1,10] + ',' +
+                                     jWQGrid.Cells[1,11] + ',' +
+                                     jWQGrid.Cells[1,12] + ',' +
+                                     jWQGrid.Cells[1,13] + ',' +
+                                     jWQGrid.Cells[1,14] + ',' +
+                                     jWQGrid.Cells[1,15] + ',' +
+                                     jWQGrid.Cells[1,16] + ')');
+         UpdateWaterQuality(False);
+  end;
+
+  if wq_dialog_mode > 0 then jWQGrid.Cells[1,wq_dialog_mode] := jEditText41.Text;
+
+  jWQDialog.Close();
+
+end;
+
+procedure TAndroidModule1.jButton14Click(Sender: TObject);
+begin
+  jEditText42.Text := degree_of_freedom;
+  jDoFDialog.Show();
+end;
+
+procedure TAndroidModule1.jButton15Click(Sender: TObject);
+begin
+  degree_of_freedom := jEditText42.Text;
+  jDoFDialog.Close();
 end;
 
 procedure TAndroidModule1.FormulationsViewClickItem(Sender: TObject;

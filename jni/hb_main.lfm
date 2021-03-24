@@ -1554,21 +1554,95 @@ object AndroidModule1: TAndroidModule1
         MarginBottom = 10
         Enabled = True
         Left = 287
-        Top = 1335
+        Top = 1385
         Width = 96
         Height = 96
         Visible = True
-        Anchor = jButton16
+        Anchor = jTextView43
         PosRelativeToAnchor = [raBelow, raAlignLeft]
         PosRelativeToParent = []
         LayoutParamWidth = lpWrapContent
         LayoutParamHeight = lpWrapContent
-        Orientation = rgVertical
+        Orientation = rgHorizontal
         BackgroundColor = colbrDefault
         OnCheckedChanged = jRadioGroup3CheckedChanged
         Items.Strings = (
           'ppm'
           'mM'
+        )
+      end
+      object jTextView43: jTextView
+        MarginLeft = 0
+        MarginTop = 20
+        MarginRight = 0
+        MarginBottom = 10
+        Enabled = True
+        Left = 277
+        Top = 1345
+        Width = 258
+        Height = 20
+        Visible = True
+        Anchor = jButton16
+        PosRelativeToAnchor = [raBelow, raAlignLeft]
+        PosRelativeToParent = []
+        LayoutParamWidth = lpHalfOfParent
+        LayoutParamHeight = lpWrapContent
+        Text = 'Concentration Units'
+        Alignment = taCenter
+        BackgroundColor = colbrDefault
+        FontColor = colbrDefault
+        FontSize = 0
+        TextTypeFace = tfNormal
+        FontSizeUnit = unitDefault
+        GravityInParent = lgNone
+      end
+      object jTextView44: jTextView
+        MarginLeft = 0
+        MarginTop = 20
+        MarginRight = 0
+        MarginBottom = 10
+        Enabled = True
+        Left = 287
+        Top = 1511
+        Width = 258
+        Height = 20
+        Visible = True
+        Anchor = jRadioGroup3
+        PosRelativeToAnchor = [raBelow, raAlignLeft]
+        PosRelativeToParent = []
+        LayoutParamWidth = lpHalfOfParent
+        LayoutParamHeight = lpWrapContent
+        Text = 'EC Model'
+        Alignment = taCenter
+        BackgroundColor = colbrDefault
+        FontColor = colbrDefault
+        FontSize = 0
+        TextTypeFace = tfNormal
+        FontSizeUnit = unitDefault
+        GravityInParent = lgNone
+      end
+      object jRadioGroup5: jRadioGroup
+        MarginLeft = 10
+        MarginTop = 10
+        MarginRight = 10
+        MarginBottom = 10
+        Enabled = True
+        Left = 297
+        Top = 1551
+        Width = 96
+        Height = 96
+        Visible = True
+        Anchor = jTextView44
+        PosRelativeToAnchor = [raBelow, raAlignLeft]
+        PosRelativeToParent = []
+        LayoutParamWidth = lpWrapContent
+        LayoutParamHeight = lpWrapContent
+        Orientation = rgHorizontal
+        BackgroundColor = colbrDefault
+        OnCheckedChanged = jRadioGroup5CheckedChanged
+        Items.Strings = (
+          'LMC'
+          'Empirical'
         )
       end
     end
@@ -3135,15 +3209,16 @@ object AndroidModule1: TAndroidModule1
       MarginLeft = 10
       MarginTop = 10
       MarginRight = 10
-      MarginBottom = 20
+      MarginBottom = 10
       Enabled = True
-      Left = 10
-      Top = 10
+      Left = 30
+      Top = 268
       Width = 496
       Height = 158
       Visible = True
-      PosRelativeToAnchor = []
-      PosRelativeToParent = [rpTop, rpLeft]
+      Anchor = jTextView42
+      PosRelativeToAnchor = [raBelow, raAlignLeft]
+      PosRelativeToParent = []
       LayoutParamWidth = lpWrapContent
       LayoutParamHeight = lpWrapContent
       BackgroundColor = colbrDefault
@@ -3236,6 +3311,29 @@ object AndroidModule1: TAndroidModule1
         GravityInParent = lgNone
         OnClick = jButton5Click
       end
+    end
+    object jTextView42: jTextView
+      MarginLeft = 20
+      MarginTop = 15
+      MarginRight = 5
+      MarginBottom = 20
+      Enabled = True
+      Left = 20
+      Top = 235
+      Width = 491
+      Height = 3
+      Visible = True
+      PosRelativeToAnchor = []
+      PosRelativeToParent = [rpTop, rpCenterVertical]
+      LayoutParamWidth = lpMatchParent
+      LayoutParamHeight = lpWrapContent
+      Alignment = taLeft
+      BackgroundColor = colbrDefault
+      FontColor = colbrLightSkyBlue
+      FontSize = 18
+      TextTypeFace = tfNormal
+      FontSizeUnit = unitDefault
+      GravityInParent = lgNone
     end
   end
   object FormulationsIds: jListView

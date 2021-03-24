@@ -28,6 +28,10 @@ type
     jDoFDialog: jCustomDialog;
     jRadioGroup3: jRadioGroup;
     jRadioGroup4: jRadioGroup;
+    jRadioGroup5: jRadioGroup;
+    jTextView42: jTextView;
+    jTextView43: jTextView;
+    jTextView44: jTextView;
     jWQDialog: jCustomDialog;
     WQIds: jListView;
     jActionBarTab1: jActionBarTab;
@@ -188,6 +192,8 @@ type
       checkedIndex: integer; checkedCaption: string);
     procedure jRadioGroup4CheckedChanged(Sender: TObject;
       checkedIndex: integer; checkedCaption: string);
+    procedure jRadioGroup5CheckedChanged(Sender: TObject;
+      checkedIndex: integer; checkedCaption: string);
     procedure jResultsGridClickItem(Sender: TObject; ItemIndex: integer;
       itemCaption: string);
     procedure jTextView20Click(Sender: TObject);
@@ -217,6 +223,7 @@ type
     selected_water_quality_id: integer;
     wq_dialog_mode: integer;
     const
+    e: double = 2.718281828459045;
     elements : array[0..15] of string =
     (
       'N_NO3',
@@ -255,6 +262,25 @@ type
       22.98977,
       35.453,
       28.0855) ;
+
+  zi : array[0..15] of double =
+    (
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      2,
+      1,
+      2,
+      2,
+      2,
+      1,
+      1,
+      0) ;
 
   substance_db_fields : array[0..19] of string =
     (
@@ -321,6 +347,7 @@ begin
     jRadioGroup1.CheckedIndex := 0;
     jRadioGroup2.CheckedIndex := 0;
     jRadioGroup3.CheckedIndex := 0;
+    jRadioGroup5.CheckedIndex := 0;
     degree_of_freedom := 'S';
 
 end;
@@ -614,6 +641,20 @@ begin
         jRadioGroup4.CheckedIndex := 0;
         exit;
      end;
+
+     if (checkedIndex = 1) and (jCheckBox1.Checked = False) then
+     begin
+        ShowMessage('You can only set %(w/v) for liquids. Make sure the "is liquid" checkbox is checked.');
+        jRadioGroup4.CheckedIndex := 0;
+        exit;
+     end;
+end;
+
+procedure TAndroidModule1.jRadioGroup5CheckedChanged(Sender: TObject;
+  checkedIndex: integer; checkedCaption: string);
+begin
+  if checkedIndex = 1 then
+  ShowMessage('This model is only accurate if your salt choices for macros are Potassium Nitrate, Calcium nitrate, Potassium sulfate, Magnesium sulfate, Ammonium sulfate and Monopotassium phosphate');
 end;
 
 procedure TAndroidModule1.jResultsGridClickItem(Sender: TObject;
@@ -848,6 +889,10 @@ var
   arraysize: integer;
   mass_of_salt: double;
 
+  // EC related variables
+  ec_contribution: array of double;
+  predicted_ec: double;
+
   begin
 
       // variable initializations
@@ -856,6 +901,48 @@ var
       volume := StrToFloat(jEditText36.Text);
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
+      SetLength(ec_contribution, 16);
+
+      if jRadioGroup5.CheckedIndex = 1 then
+      begin
+        ec_contribution[0]  := 0.403791;
+        ec_contribution[1] := -0.308967;
+        ec_contribution[2]  := 0.142525;
+        ec_contribution[3]  := -0.110791;
+        ec_contribution[4]  := -0.283549;
+        ec_contribution[5]  := -0.358782;
+        ec_contribution[6]  := 0.276118;
+        ec_contribution[7]  := 0;
+        ec_contribution[8]  := 0;
+        ec_contribution[9]  := 0;
+        ec_contribution[10]  := 0;
+        ec_contribution[11] := 0;
+        ec_contribution[12] := 0;
+        ec_contribution[13] := 0;
+        ec_contribution[14] := 0;
+        ec_contribution[15] := 0;
+      end;
+
+      // limiting molar conductivity contributions in (mS/cm)/mg
+      if jRadioGroup5.CheckedIndex = 0 then
+      begin
+        ec_contribution[0]  := 71.46 / elements_molar_mass[0];
+        ec_contribution[1] := 73.5 / elements_molar_mass[1];
+        ec_contribution[3]  := 57 / elements_molar_mass[2];
+        ec_contribution[2]  := 73 / elements_molar_mass[3];
+        ec_contribution[5]  := 119 / elements_molar_mass[4];
+        ec_contribution[4]  := 106 / elements_molar_mass[5];
+        ec_contribution[6]  := 160 / elements_molar_mass[6];
+        ec_contribution[7]  := 108.0 / elements_molar_mass[7];
+        ec_contribution[8]  := 0;
+        ec_contribution[9]  := 0;
+        ec_contribution[10]  := 0;
+        ec_contribution[11] := 0;
+        ec_contribution[12] := 0;
+        ec_contribution[13] := 50.01 / elements_molar_mass[13];
+        ec_contribution[14] := 76.35 / elements_molar_mass[14];
+        ec_contribution[15] := 100 / elements_molar_mass[15];
+      end;
 
       // if this is set to mM change to ppm for calculation
       if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
@@ -954,6 +1041,13 @@ var
 
     end;
 
+    // EC prediction code
+    predicted_ec := 0;
+    for i := 0 to 15 do predicted_ec := Result[i] * ec_contribution[i] + predicted_ec;
+    if jRadioGroup5.CheckedIndex = 0 then predicted_ec := round2(predicted_ec, 3);
+    if jRadioGroup5.CheckedIndex = 1 then predicted_ec := round2(predicted_ec+0.39661671, 3);
+    jTextView42.Text := 'EC = ' + FloattoStr(predicted_ec) + ' mS/cm';
+
     jActionBarTab1.SelectTabByIndex(6);
 
 end;
@@ -974,6 +1068,10 @@ var
   total_ppm_contribution_for_element: double;
   all_element_targets: array of double;
 
+  // EC related variables
+  ec_contribution: array of double;
+  predicted_ec: double;
+  ionic_strength : double;
 
   // for alglib function call
   solutions: array of double;
@@ -992,6 +1090,9 @@ var
       volume := StrToFloat(jEditText36.Text);
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
+      SetLength(ec_contribution, 16);
+
+      if jRadioGroup1.CheckedIndex = 1 then volume := volume*3.78541;
 
       // if this is set to mM change to ppm for calculation
       if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
@@ -1149,13 +1250,13 @@ var
         if jRadioGroup2.CheckedIndex = 0 then
         begin
              jResultsGrid.Cells[0,i+1] := (name_array[i][0]);
-             jResultsGrid.Cells[1,i+1] := (FloatToStr(round2(solutions[i], 3)) );
+             jResultsGrid.Cells[1,i+1] := (FloatToStr(round2(0.1*solutions[i], 3)) );
         end;
 
         if jRadioGroup2.CheckedIndex = 1 then
         begin
              jResultsGrid.Cells[0,i+1] := (name_array[i][1] + ' ' + name_array[i][0]);
-             jResultsGrid.Cells[1,i+1] := (FloatToStr(round2(solutions[i] * conc_factor, 3)));
+             jResultsGrid.Cells[1,i+1] := (FloatToStr(round2(0.1*solutions[i] * conc_factor, 3)));
         end;
 
       end else begin
@@ -1197,6 +1298,71 @@ var
       jResultsGrid2.Cells[2,i+1] := '0';
 
     end;
+
+
+    // limiting molar conductivity model
+      if jRadioGroup5.CheckedIndex = 0 then
+      begin
+
+        // calculate ionic strength used for conductivity model
+        ionic_strength := 0;
+        for i := 0 to 14 do ionic_strength := zi[i]*zi[i]*(Result[i] /(1000*elements_molar_mass[i])) + ionic_strength;
+        ShowMessage(FloatToStr(ionic_strength));
+
+        ec_contribution[0]  := (71.46);
+        ec_contribution[1] := (73.5);
+        ec_contribution[2]  := (57);
+        ec_contribution[3]  := (73.5);
+        ec_contribution[4]  :=(119);
+        ec_contribution[5]  := (106);
+        ec_contribution[6]  := (160);
+        ec_contribution[7]  := (108.0);
+        ec_contribution[8]  := 0;
+        ec_contribution[9]  := 0;
+        ec_contribution[10]  := 0;
+        ec_contribution[11] := 0;
+        ec_contribution[12] := 0;
+        ec_contribution[13] := (50.01);
+        ec_contribution[14] := (76.35);
+        ec_contribution[15] := 0;
+
+        predicted_ec := 0;
+        for i := 0 to 14 do
+        begin
+          predicted_ec := (Result[i]/1000*elements_molar_mass[i]) * ec_contribution[i] * power(power(e,-Ln(10)*0.5085*zi[i]*zi[i]*sqrt(ionic_strength)),(0.6/sqrt(zi[i]))) + predicted_ec;
+        end;
+
+        predicted_ec := predicted_ec/1000;
+      end;
+
+    if jRadioGroup5.CheckedIndex = 1 then
+    begin
+        ec_contribution[0]  := 0.403791;
+        ec_contribution[1] := -0.308967;
+        ec_contribution[2]  := 0.142525;
+        ec_contribution[3]  := -0.110791;
+        ec_contribution[4]  := -0.283549;
+        ec_contribution[5]  := -0.358782;
+        ec_contribution[6]  := 0.276118;
+        ec_contribution[7]  := 0.0;
+        ec_contribution[8]  := 0.0;
+        ec_contribution[9]  := 0.0;
+        ec_contribution[10]  := 0.0;
+        ec_contribution[11] := 0.0;
+        ec_contribution[12] := 0.0;
+        ec_contribution[13] := 0.0;
+        ec_contribution[14] := 0.0;
+        ec_contribution[15] := 0.0;
+
+        predicted_ec := 0.0;
+        for i := 0 to 15 do
+        begin
+          predicted_ec := (Result[i] * ec_contribution[i]) + predicted_ec;
+        end;
+        predicted_ec := round2(predicted_ec+0.39661671, 3);
+    end;
+
+    jTextView42.Text := 'EC = ' + FloattoStr(predicted_ec) + ' mS/cm';
 
     jActionBarTab1.SelectTabByIndex(5);
 

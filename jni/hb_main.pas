@@ -21,10 +21,13 @@ type
     jButton13: jButton;
     jButton14: jButton;
     jButton15: jButton;
+    jButton16: jButton;
     jDialogYN2: jDialogYN;
     jEditText41: jEditText;
     jEditText42: jEditText;
     jDoFDialog: jCustomDialog;
+    jRadioGroup3: jRadioGroup;
+    jRadioGroup4: jRadioGroup;
     jWQDialog: jCustomDialog;
     WQIds: jListView;
     jActionBarTab1: jActionBarTab;
@@ -164,6 +167,7 @@ type
     procedure jButton13Click(Sender: TObject);
     procedure jButton14Click(Sender: TObject);
     procedure jButton15Click(Sender: TObject);
+    procedure jButton16Click(Sender: TObject);
     procedure jButton1Click(Sender: TObject);
     procedure AndroidModule1JNIPrompt(Sender: TObject);
     procedure jButton2Click(Sender: TObject);
@@ -180,6 +184,10 @@ type
     procedure jPanel2FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jPanel3FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jPanel4FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
+    procedure jRadioGroup3CheckedChanged(Sender: TObject;
+      checkedIndex: integer; checkedCaption: string);
+    procedure jRadioGroup4CheckedChanged(Sender: TObject;
+      checkedIndex: integer; checkedCaption: string);
     procedure jResultsGridClickItem(Sender: TObject; ItemIndex: integer;
       itemCaption: string);
     procedure jTextView20Click(Sender: TObject);
@@ -227,6 +235,26 @@ type
       'Na',
       'Cl',
       'Si') ;
+
+    // taken from https://www.angelo.edu/faculty/kboudrea/periodic/structure_mass.htm
+    elements_molar_mass : array[0..15] of double =
+    (
+      14.0067,
+      14.0067,
+      30.97376,
+      39.0983,
+      40.08,
+      24.305,
+      32.06,
+      55.847,
+      54.9380,
+      10.81,
+      65.38,
+      63.546,
+      95.94,
+      22.98977,
+      35.453,
+      28.0855) ;
 
   substance_db_fields : array[0..19] of string =
     (
@@ -292,6 +320,7 @@ begin
     UpdateWaterQuality(True);
     jRadioGroup1.CheckedIndex := 0;
     jRadioGroup2.CheckedIndex := 0;
+    jRadioGroup3.CheckedIndex := 0;
     degree_of_freedom := 'S';
 
 end;
@@ -303,6 +332,8 @@ begin
   jTextView33.Visible := True ;
   jEditText33.Visible := True;
   jCheckBox1.Visible := True;
+  jRadioGroup4.CheckedIndex := 0;
+  jRadioGroup4.Visible := True;
 
   jEditText17.Text := '0';
   jEditText18.Text := '0';
@@ -373,9 +404,30 @@ begin
    if jButton3.Text = 'Add' then
    begin
 
+      // if selected % is w/v then adjust according to the density
+      if jRadioGroup4.CheckedIndex = 1 then
+      begin
+           jEditText17.Text := FloatToStr(StrToFloat(jEditText17.Text)/StrToFloat(jEditText33.Text));
+           jEditText18.Text := FloatToStr(StrToFloat(jEditText18.Text)/StrToFloat(jEditText33.Text));
+           jEditText19.Text := FloatToStr(StrToFloat(jEditText19.Text)/StrToFloat(jEditText33.Text));
+           jEditText20.Text := FloatToStr(StrToFloat(jEditText20.Text)/StrToFloat(jEditText33.Text));
+           jEditText21.Text := FloatToStr(StrToFloat(jEditText21.Text)/StrToFloat(jEditText33.Text));
+           jEditText22.Text := FloatToStr(StrToFloat(jEditText22.Text)/StrToFloat(jEditText33.Text));
+           jEditText23.Text := FloatToStr(StrToFloat(jEditText23.Text)/StrToFloat(jEditText33.Text));
+           jEditText24.Text := FloatToStr(StrToFloat(jEditText24.Text)/StrToFloat(jEditText33.Text));
+           jEditText25.Text := FloatToStr(StrToFloat(jEditText25.Text)/StrToFloat(jEditText33.Text));
+           jEditText26.Text := FloatToStr(StrToFloat(jEditText26.Text)/StrToFloat(jEditText33.Text));
+           jEditText27.Text := FloatToStr(StrToFloat(jEditText27.Text)/StrToFloat(jEditText33.Text));
+           jEditText28.Text := FloatToStr(StrToFloat(jEditText28.Text)/StrToFloat(jEditText33.Text));
+           jEditText29.Text := FloatToStr(StrToFloat(jEditText29.Text)/StrToFloat(jEditText33.Text));
+           jEditText30.Text := FloatToStr(StrToFloat(jEditText30.Text)/StrToFloat(jEditText33.Text));
+           jEditText31.Text := FloatToStr(StrToFloat(jEditText31.Text)/StrToFloat(jEditText33.Text));
+           jEditText32.Text := FloatToStr(StrToFloat(jEditText32.Text)/StrToFloat(jEditText33.Text));
+      end;
+
       jSqliteDataAccess1.InsertIntoTable('INSERT INTO substances (Name, ConcType, Purity, Density, isLiquid, N_NO3, N_NH4, P, K, Ca, Mg, S, Fe, Mn, B, Zn, Cu, Mo, Na, Cl, Si) VALUES ' +
                                      '("' + jEditText35.Text + '",'+
-                                     '("' + jEditText39.Text + '",'+
+                                     '"' + jEditText39.Text + '",'+
                                      jEditText34.Text + ',' +
                                      jEditText33.Text + ',' +
                                      is_liquid + ',' +
@@ -504,6 +556,71 @@ begin
   //case flingGesture of
   //   fliLeftToRight: jActionBarTab1.SelectTabByIndex(2);
   //end;
+end;
+
+procedure TAndroidModule1.jRadioGroup3CheckedChanged(Sender: TObject;
+  checkedIndex: integer; checkedCaption: string);
+begin
+  // ppms checked
+  if checkedIndex = 0 then
+  begin
+       jTextView41.Text := 'Conc (ppm)' ;
+       jEditText1.Text := FloatToStr(StrToFloat(jEditText1.Text)*elements_molar_mass[0]);
+       jEditText2.Text := FloatToStr(StrToFloat(jEditText2.Text)*elements_molar_mass[1]);
+       jEditText3.Text := FloatToStr(StrToFloat(jEditText3.Text)*elements_molar_mass[2]);
+       jEditText4.Text := FloatToStr(StrToFloat(jEditText4.Text)*elements_molar_mass[3]);
+       jEditText5.Text := FloatToStr(StrToFloat(jEditText5.Text)*elements_molar_mass[4]);
+       jEditText6.Text := FloatToStr(StrToFloat(jEditText6.Text)*elements_molar_mass[5]);
+       jEditText7.Text := FloatToStr(StrToFloat(jEditText7.Text)*elements_molar_mass[6]);
+       jEditText8.Text := FloatToStr(StrToFloat(jEditText8.Text)*elements_molar_mass[7]);
+       jEditText9.Text := FloatToStr(StrToFloat(jEditText9.Text)*elements_molar_mass[8]);
+       jEditText10.Text := FloatToStr(StrToFloat(jEditText10.Text)*elements_molar_mass[9]);
+       jEditText11.Text := FloatToStr(StrToFloat(jEditText11.Text)*elements_molar_mass[10]);
+       jEditText12.Text := FloatToStr(StrToFloat(jEditText12.Text)*elements_molar_mass[11]);
+       jEditText13.Text := FloatToStr(StrToFloat(jEditText13.Text)*elements_molar_mass[12]);
+       jEditText14.Text := FloatToStr(StrToFloat(jEditText14.Text)*elements_molar_mass[13]);
+       jEditText15.Text := FloatToStr(StrToFloat(jEditText15.Text)*elements_molar_mass[14]);
+       jEditText16.Text := FloatToStr(StrToFloat(jEditText16.Text)*elements_molar_mass[15]);
+  end;
+
+  if checkedIndex = 1 then
+  begin
+       jTextView41.Text := 'Conc (mM)' ;
+       jEditText1.Text := FloatToStr(StrToFloat(jEditText1.Text)/elements_molar_mass[0]);
+       jEditText2.Text := FloatToStr(StrToFloat(jEditText2.Text)/elements_molar_mass[1]);
+       jEditText3.Text := FloatToStr(StrToFloat(jEditText3.Text)/elements_molar_mass[2]);
+       jEditText4.Text := FloatToStr(StrToFloat(jEditText4.Text)/elements_molar_mass[3]);
+       jEditText5.Text := FloatToStr(StrToFloat(jEditText5.Text)/elements_molar_mass[4]);
+       jEditText6.Text := FloatToStr(StrToFloat(jEditText6.Text)/elements_molar_mass[5]);
+       jEditText7.Text := FloatToStr(StrToFloat(jEditText7.Text)/elements_molar_mass[6]);
+       jEditText8.Text := FloatToStr(StrToFloat(jEditText8.Text)/elements_molar_mass[7]);
+       jEditText9.Text := FloatToStr(StrToFloat(jEditText9.Text)/elements_molar_mass[8]);
+       jEditText10.Text := FloatToStr(StrToFloat(jEditText10.Text)/elements_molar_mass[9]);
+       jEditText11.Text := FloatToStr(StrToFloat(jEditText11.Text)/elements_molar_mass[10]);
+       jEditText12.Text := FloatToStr(StrToFloat(jEditText12.Text)/elements_molar_mass[11]);
+       jEditText13.Text := FloatToStr(StrToFloat(jEditText13.Text)/elements_molar_mass[12]);
+       jEditText14.Text := FloatToStr(StrToFloat(jEditText14.Text)/elements_molar_mass[13]);
+       jEditText15.Text := FloatToStr(StrToFloat(jEditText15.Text)/elements_molar_mass[14]);
+       jEditText16.Text := FloatToStr(StrToFloat(jEditText16.Text)/elements_molar_mass[15]);
+  end;
+end;
+
+procedure TAndroidModule1.jRadioGroup4CheckedChanged(Sender: TObject;
+  checkedIndex: integer; checkedCaption: string);
+begin
+     if (checkedIndex = 1) and (jEditText33.Text = '0') then
+     begin
+        ShowMessage('Density cannot be zero when setting weights to %(w/v)');
+        jRadioGroup4.CheckedIndex := 0;
+        exit;
+     end;
+
+     if (checkedIndex = 1) and (jCheckBox1.Checked = False) then
+     begin
+        ShowMessage('You can only set %(w/v) for liquids. Make sure the "is liquid" checkbox is checked.');
+        jRadioGroup4.CheckedIndex := 0;
+        exit;
+     end;
 end;
 
 procedure TAndroidModule1.jResultsGridClickItem(Sender: TObject;
@@ -653,6 +770,8 @@ var
   is_used: integer;
 begin
 
+  jRadioGroup4.Visible := False;
+
   substance_id := SubstancesIds.Items[itemIndex];
   selected_substance_id := StrToInt(substance_id);
   jSqliteDataAccess1.Select('SELECT * FROM substances WHERE substance_id=' + substance_id, false);
@@ -744,6 +863,9 @@ var
       volume := StrToFloat(jEditText36.Text);
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
+
+      // if this is set to mM change to ppm for calculation
+      if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
 
       SetLength(all_element_targets, 16);
 
@@ -877,6 +999,9 @@ var
       volume := StrToFloat(jEditText36.Text);
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
+
+      // if this is set to mM change to ppm for calculation
+      if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
 
       SetLength(varnames, 15);
       SetLength(vartargetvalue, 15);
@@ -1177,6 +1302,10 @@ end;
 
 procedure TAndroidModule1.jButton10Click(Sender: TObject);
 begin
+
+  // if this is set to mM change to ppm for calculation
+  if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
+
   jSqliteDataAccess1.InsertIntoTable('INSERT INTO formulations (Name, N_NO3, N_NH4, P, K, Ca, Mg, S, Fe, Mn, B, Zn, Cu, Mo, Na, Cl, Si) VALUES ' +
                                      '("' + jEditText40.Text + '",'+
                                      jEditText1.Text + ',' +
@@ -1256,6 +1385,26 @@ procedure TAndroidModule1.jButton15Click(Sender: TObject);
 begin
   degree_of_freedom := jEditText42.Text;
   jDoFDialog.Close();
+end;
+
+procedure TAndroidModule1.jButton16Click(Sender: TObject);
+begin
+  jEditText1.Text := '0';
+  jEditText2.Text := '0';
+  jEditText3.Text := '0';
+  jEditText4.Text := '0';
+  jEditText5.Text := '0';
+  jEditText6.Text := '0';
+  jEditText7.Text := '0';
+  jEditText8.Text := '0';
+  jEditText9.Text := '0';
+  jEditText10.Text := '0';
+  jEditText11.Text := '0';
+  jEditText12.Text := '0';
+  jEditText13.Text := '0';
+  jEditText14.Text := '0';
+  jEditText15.Text := '0';
+  jEditText16.Text := '0';
 end;
 
 procedure TAndroidModule1.FormulationsViewClickItem(Sender: TObject;

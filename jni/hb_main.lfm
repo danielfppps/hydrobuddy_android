@@ -4,8 +4,8 @@ object AndroidModule1: TAndroidModule1
   MarginRight = 0
   MarginBottom = 0
   Enabled = True
-  Left = 2745
-  Top = 113
+  Left = 1354
+  Top = 103
   Width = 516
   Height = 753
   Text = 'AndroidModule1'
@@ -1463,6 +1463,8 @@ object AndroidModule1: TAndroidModule1
         BackgroundColor = colbrDefault
         Cancelable = True
         ShowTitle = False
+        Left = 162
+        Top = 703
         object jEditText42: jEditText
           MarginLeft = 5
           MarginTop = 5
@@ -1768,7 +1770,7 @@ object AndroidModule1: TAndroidModule1
         Width = 119
         Height = 20
         Visible = True
-        Anchor = jRadioGroup4
+        Anchor = jTextView39
         PosRelativeToAnchor = [raBelow, raAlignLeft]
         PosRelativeToParent = []
         LayoutParamWidth = lpOneFifthOfParent
@@ -2795,79 +2797,17 @@ object AndroidModule1: TAndroidModule1
         Width = 91
         Height = 32
         Visible = True
-        Anchor = jEditText33
-        PosRelativeToAnchor = [raToRightOf, raAlignBaseline]
+        Anchor = jTextView34
+        PosRelativeToAnchor = [raBelow, raAlignLeft]
         PosRelativeToParent = []
         LayoutParamWidth = lpWrapContent
         LayoutParamHeight = lpWrapContent
-        Text = 'Is Liquid'
+        Text = 'W/V% and mL'
         BackgroundColor = colbrDefault
         FontColor = colbrDefault
         FontSize = 0
         Checked = False
         FontSizeUnit = unitDefault
-      end
-      object jTextView33: jTextView
-        MarginLeft = 0
-        MarginTop = 30
-        MarginRight = 0
-        MarginBottom = 20
-        Enabled = True
-        Left = 0
-        Top = 170
-        Width = 119
-        Height = 20
-        Visible = True
-        Anchor = jTextView34
-        PosRelativeToAnchor = [raBelow, raAlignLeft]
-        PosRelativeToParent = []
-        LayoutParamWidth = lpOneFifthOfParent
-        LayoutParamHeight = lpWrapContent
-        Text = 'Density (g/mL)'
-        Alignment = taLeft
-        BackgroundColor = colbrDefault
-        FontColor = colbrDefault
-        FontSize = 0
-        TextTypeFace = tfNormal
-        FontSizeUnit = unitDefault
-        GravityInParent = lgNone
-        OnClick = jTextView32Click
-      end
-      object jEditText33: jEditText
-        MarginLeft = 0
-        MarginTop = 0
-        MarginRight = 0
-        MarginBottom = 5
-        Enabled = True
-        Left = 119
-        Top = 161
-        Width = 149
-        Height = 39
-        Visible = True
-        Anchor = jTextView33
-        PosRelativeToAnchor = [raToRightOf, raAlignBaseline]
-        PosRelativeToParent = []
-        LayoutParamWidth = lpOneQuarterOfParent
-        LayoutParamHeight = lpWrapContent
-        Text = '0'
-        Alignment = taLeft
-        InputTypeEx = itxText
-        MaxTextLength = -1
-        BackgroundColor = colbrDarkGray
-        FontColor = colbrDefault
-        FontSize = 0
-        HintTextColor = colbrDefault
-        ScrollBarStyle = scrNone
-        MaxLines = 1
-        HorScrollBar = True
-        VerScrollBar = True
-        WrappingLine = False
-        Editable = True
-        FontSizeUnit = unitDefault
-        CloseSoftInputOnEnter = True
-        CapSentence = False
-        CaptureBackPressed = False
-        GravityInParent = lgNone
       end
       object jTextView34: jTextView
         MarginLeft = 0
@@ -3037,7 +2977,7 @@ object AndroidModule1: TAndroidModule1
         Width = 149
         Height = 20
         Visible = True
-        Anchor = jTextView33
+        Anchor = jCheckBox1
         PosRelativeToAnchor = [raBelow, raAlignLeft]
         PosRelativeToParent = [rpLeft]
         LayoutParamWidth = lpOneQuarterOfParent
@@ -3050,30 +2990,6 @@ object AndroidModule1: TAndroidModule1
         TextTypeFace = tfNormal
         FontSizeUnit = unitDefault
         GravityInParent = lgNone
-      end
-      object jRadioGroup4: jRadioGroup
-        MarginLeft = 10
-        MarginTop = 10
-        MarginRight = 10
-        MarginBottom = 10
-        Enabled = True
-        Left = 43
-        Top = 354
-        Width = 96
-        Height = 96
-        Visible = True
-        Anchor = jTextView39
-        PosRelativeToAnchor = [raBelow, raAlignLeft]
-        PosRelativeToParent = []
-        LayoutParamWidth = lpWrapContent
-        LayoutParamHeight = lpWrapContent
-        Orientation = rgHorizontal
-        BackgroundColor = colbrDefault
-        OnCheckedChanged = jRadioGroup4CheckedChanged
-        Items.Strings = (
-          '% (w/w)'
-          '% (w/v)'
-        )
       end
     end
   end
@@ -3516,30 +3432,6 @@ object AndroidModule1: TAndroidModule1
       GravityInParent = lgNone
       OnClick = jButton7Click
     end
-    object jButton8: jButton
-      MarginLeft = 5
-      MarginTop = 5
-      MarginRight = 5
-      MarginBottom = 5
-      Enabled = True
-      Left = 20
-      Top = 327
-      Width = 491
-      Height = 65
-      Visible = True
-      Anchor = jButton7
-      PosRelativeToAnchor = [raBelow, raAlignLeft]
-      PosRelativeToParent = []
-      LayoutParamWidth = lpMatchParent
-      LayoutParamHeight = lpWrapContent
-      Text = 'Paypal Donate'
-      BackgroundColor = colbrDefault
-      FontColor = colbrDefault
-      FontSize = 28
-      FontSizeUnit = unitDefault
-      GravityInParent = lgNone
-      OnClick = jButton8Click
-    end
   end
   object jPanel9: jPanel
     MarginLeft = 0
@@ -3739,6 +3631,8 @@ object AndroidModule1: TAndroidModule1
       BackgroundColor = colbrDefault
       Cancelable = True
       ShowTitle = False
+      Left = 162
+      Top = 703
       object jEditText41: jEditText
         MarginLeft = 5
         MarginTop = 5

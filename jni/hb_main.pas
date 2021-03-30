@@ -27,7 +27,6 @@ type
     jEditText42: jEditText;
     jDoFDialog: jCustomDialog;
     jRadioGroup3: jRadioGroup;
-    jRadioGroup4: jRadioGroup;
     jRadioGroup5: jRadioGroup;
     jTextView42: jTextView;
     jTextView43: jTextView;
@@ -45,7 +44,6 @@ type
     jButton5: jButton;
     jButton6: jButton;
     jButton7: jButton;
-    jButton8: jButton;
     jButton9: jButton;
     jCheckBox1: jCheckBox;
     jCustomDialog1: jCustomDialog;
@@ -96,7 +94,6 @@ type
     jEditText30: jEditText;
     jEditText31: jEditText;
     jEditText32: jEditText;
-    jEditText33: jEditText;
     jEditText34: jEditText;
     jEditText35: jEditText;
     jEditText38: jEditText;
@@ -135,7 +132,6 @@ type
     jTextView30: jTextView;
     jTextView31: jTextView;
     jTextView32: jTextView;
-    jTextView33: jTextView;
     jTextView34: jTextView;
     jTextView35: jTextView;
     jTextView36: jTextView;
@@ -189,8 +185,6 @@ type
     procedure jPanel3FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jPanel4FlingGesture(Sender: TObject; flingGesture: TFlingGesture);
     procedure jRadioGroup3CheckedChanged(Sender: TObject;
-      checkedIndex: integer; checkedCaption: string);
-    procedure jRadioGroup4CheckedChanged(Sender: TObject;
       checkedIndex: integer; checkedCaption: string);
     procedure jRadioGroup5CheckedChanged(Sender: TObject;
       checkedIndex: integer; checkedCaption: string);
@@ -356,11 +350,7 @@ procedure TAndroidModule1.jButton2Click(Sender: TObject);
 begin
   jButton3.Text := 'Add';
   jButton4.Enabled := False;
-  jTextView33.Visible := True ;
-  jEditText33.Visible := True;
   jCheckBox1.Visible := True;
-  jRadioGroup4.CheckedIndex := 0;
-  jRadioGroup4.Visible := True;
 
   jEditText17.Text := '0';
   jEditText18.Text := '0';
@@ -378,7 +368,6 @@ begin
   jEditText30.Text := '0';
   jEditText31.Text := '0';
   jEditText32.Text := '0';
-  jEditText33.Text := '0';
   jEditText34.Text := '100';
   jEditText35.Text := '';
   jEditText39.Text := '';
@@ -406,7 +395,6 @@ begin
       jSqliteDataAccess1.UpdateTable('UPDATE substances SET Name="' + jEditText35.Text + '",'+
                                      'ConcType="' + jEditText39.Text + '",' +
                                      'Purity=' + jEditText34.Text + ',' +
-                                     'Density=' + jEditText33.Text + ',' +
                                      'isLiquid=' + is_liquid + ',' +
                                      'N_NO3=' + jEditText17.Text + ',' +
                                      'N_NH4=' + jEditText18.Text + ',' +
@@ -431,32 +419,10 @@ begin
    if jButton3.Text = 'Add' then
    begin
 
-      // if selected % is w/v then adjust according to the density
-      if jRadioGroup4.CheckedIndex = 1 then
-      begin
-           jEditText17.Text := FloatToStr(StrToFloat(jEditText17.Text)/StrToFloat(jEditText33.Text));
-           jEditText18.Text := FloatToStr(StrToFloat(jEditText18.Text)/StrToFloat(jEditText33.Text));
-           jEditText19.Text := FloatToStr(StrToFloat(jEditText19.Text)/StrToFloat(jEditText33.Text));
-           jEditText20.Text := FloatToStr(StrToFloat(jEditText20.Text)/StrToFloat(jEditText33.Text));
-           jEditText21.Text := FloatToStr(StrToFloat(jEditText21.Text)/StrToFloat(jEditText33.Text));
-           jEditText22.Text := FloatToStr(StrToFloat(jEditText22.Text)/StrToFloat(jEditText33.Text));
-           jEditText23.Text := FloatToStr(StrToFloat(jEditText23.Text)/StrToFloat(jEditText33.Text));
-           jEditText24.Text := FloatToStr(StrToFloat(jEditText24.Text)/StrToFloat(jEditText33.Text));
-           jEditText25.Text := FloatToStr(StrToFloat(jEditText25.Text)/StrToFloat(jEditText33.Text));
-           jEditText26.Text := FloatToStr(StrToFloat(jEditText26.Text)/StrToFloat(jEditText33.Text));
-           jEditText27.Text := FloatToStr(StrToFloat(jEditText27.Text)/StrToFloat(jEditText33.Text));
-           jEditText28.Text := FloatToStr(StrToFloat(jEditText28.Text)/StrToFloat(jEditText33.Text));
-           jEditText29.Text := FloatToStr(StrToFloat(jEditText29.Text)/StrToFloat(jEditText33.Text));
-           jEditText30.Text := FloatToStr(StrToFloat(jEditText30.Text)/StrToFloat(jEditText33.Text));
-           jEditText31.Text := FloatToStr(StrToFloat(jEditText31.Text)/StrToFloat(jEditText33.Text));
-           jEditText32.Text := FloatToStr(StrToFloat(jEditText32.Text)/StrToFloat(jEditText33.Text));
-      end;
-
-      jSqliteDataAccess1.InsertIntoTable('INSERT INTO substances (Name, ConcType, Purity, Density, isLiquid, N_NO3, N_NH4, P, K, Ca, Mg, S, Fe, Mn, B, Zn, Cu, Mo, Na, Cl, Si) VALUES ' +
+      jSqliteDataAccess1.InsertIntoTable('INSERT INTO substances (Name, ConcType, Purity, isLiquid, N_NO3, N_NH4, P, K, Ca, Mg, S, Fe, Mn, B, Zn, Cu, Mo, Na, Cl, Si) VALUES ' +
                                      '("' + jEditText35.Text + '",'+
                                      '"' + jEditText39.Text + '",'+
                                      jEditText34.Text + ',' +
-                                     jEditText33.Text + ',' +
                                      is_liquid + ',' +
                                      jEditText17.Text + ',' +
                                      jEditText18.Text + ',' +
@@ -632,24 +598,6 @@ begin
   end;
 end;
 
-procedure TAndroidModule1.jRadioGroup4CheckedChanged(Sender: TObject;
-  checkedIndex: integer; checkedCaption: string);
-begin
-     if (checkedIndex = 1) and (jEditText33.Text = '0') then
-     begin
-        ShowMessage('Density cannot be zero when setting weights to %(w/v)');
-        jRadioGroup4.CheckedIndex := 0;
-        exit;
-     end;
-
-     if (checkedIndex = 1) and (jCheckBox1.Checked = False) then
-     begin
-        ShowMessage('You can only set %(w/v) for liquids. Make sure the "is liquid" checkbox is checked.');
-        jRadioGroup4.CheckedIndex := 0;
-        exit;
-     end;
-end;
-
 procedure TAndroidModule1.jRadioGroup5CheckedChanged(Sender: TObject;
   checkedIndex: integer; checkedCaption: string);
 begin
@@ -804,8 +752,6 @@ var
   is_used: integer;
 begin
 
-  jRadioGroup4.Visible := False;
-
   substance_id := SubstancesIds.Items[itemIndex];
   selected_substance_id := StrToInt(substance_id);
   jSqliteDataAccess1.Select('SELECT * FROM substances WHERE substance_id=' + substance_id, false);
@@ -828,23 +774,8 @@ begin
   jEditText31.Text := sqlCursor.GetValueAsString('Cl');
   jEditText32.Text := sqlCursor.GetValueAsString('Si');
 
-  if sqlCursor.GetValueAsInteger('isLiquid') = 1 then
-  begin
-     jTextView33.Visible := True ;
-     jEditText33.Text := sqlCursor.GetValueAsString('Density');
-     jCheckBox1.Checked := True;
-     jEditText33.Visible := True;
-     jCheckBox1.Visible := True;
-  end;
-
-  if sqlCursor.GetValueAsInteger('isLiquid') = 0 then
-  begin
-     jTextView33.Visible := False;
-     jEditText33.Visible := False;
-     jCheckBox1.Visible := False;
-     jEditText33.Text := '0';
-     jCheckBox1.Checked := False;
-  end;
+  if sqlCursor.GetValueAsInteger('isLiquid') = 1 then  jCheckBox1.Checked := True;
+  if sqlCursor.GetValueAsInteger('isLiquid') = 0 then  jCheckBox1.Checked := False;
 
   jEditText34.Text := sqlCursor.GetValueAsString('Purity');
   jEditText35.Text := sqlCursor.GetValueAsString('Name');
@@ -892,6 +823,7 @@ var
   // EC related variables
   ec_contribution: array of double;
   predicted_ec: double;
+  ionic_strength: double;
 
   begin
 
@@ -902,47 +834,6 @@ var
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
       SetLength(ec_contribution, 16);
-
-      if jRadioGroup5.CheckedIndex = 1 then
-      begin
-        ec_contribution[0]  := 0.403791;
-        ec_contribution[1] := -0.308967;
-        ec_contribution[2]  := 0.142525;
-        ec_contribution[3]  := -0.110791;
-        ec_contribution[4]  := -0.283549;
-        ec_contribution[5]  := -0.358782;
-        ec_contribution[6]  := 0.276118;
-        ec_contribution[7]  := 0;
-        ec_contribution[8]  := 0;
-        ec_contribution[9]  := 0;
-        ec_contribution[10]  := 0;
-        ec_contribution[11] := 0;
-        ec_contribution[12] := 0;
-        ec_contribution[13] := 0;
-        ec_contribution[14] := 0;
-        ec_contribution[15] := 0;
-      end;
-
-      // limiting molar conductivity contributions in (mS/cm)/mg
-      if jRadioGroup5.CheckedIndex = 0 then
-      begin
-        ec_contribution[0]  := 71.46 / elements_molar_mass[0];
-        ec_contribution[1] := 73.5 / elements_molar_mass[1];
-        ec_contribution[3]  := 57 / elements_molar_mass[2];
-        ec_contribution[2]  := 73 / elements_molar_mass[3];
-        ec_contribution[5]  := 119 / elements_molar_mass[4];
-        ec_contribution[4]  := 106 / elements_molar_mass[5];
-        ec_contribution[6]  := 160 / elements_molar_mass[6];
-        ec_contribution[7]  := 108.0 / elements_molar_mass[7];
-        ec_contribution[8]  := 0;
-        ec_contribution[9]  := 0;
-        ec_contribution[10]  := 0;
-        ec_contribution[11] := 0;
-        ec_contribution[12] := 0;
-        ec_contribution[13] := 50.01 / elements_molar_mass[13];
-        ec_contribution[14] := 76.35 / elements_molar_mass[14];
-        ec_contribution[15] := 100 / elements_molar_mass[15];
-      end;
 
       // if this is set to mM change to ppm for calculation
       if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
@@ -1018,8 +909,8 @@ var
               mass_of_salt := StrToFloat(jResultsGrid.Cells[1, j+1]);
               if ( mass_of_salt > 0) then
               begin
-                   if jRadioGroup2.CheckedIndex = 0 then total_ppm_contribution_for_element  := mass_of_salt * all_element_contributions[i][j] + total_ppm_contribution_for_element;
-                   if jRadioGroup2.CheckedIndex = 1 then total_ppm_contribution_for_element  := (mass_of_salt/conc_factor) * all_element_contributions[i][j] + total_ppm_contribution_for_element;
+                   if jRadioGroup2.CheckedIndex = 0 then total_ppm_contribution_for_element  := 10*mass_of_salt * all_element_contributions[i][j] + total_ppm_contribution_for_element;
+                   if jRadioGroup2.CheckedIndex = 1 then total_ppm_contribution_for_element  := 10*(mass_of_salt/conc_factor) * all_element_contributions[i][j] + total_ppm_contribution_for_element;
               end;
          end;
          Result[i] := total_ppm_contribution_for_element;
@@ -1041,12 +932,67 @@ var
 
     end;
 
-    // EC prediction code
-    predicted_ec := 0;
-    for i := 0 to 15 do predicted_ec := Result[i] * ec_contribution[i] + predicted_ec;
-    if jRadioGroup5.CheckedIndex = 0 then predicted_ec := round2(predicted_ec, 3);
-    if jRadioGroup5.CheckedIndex = 1 then predicted_ec := round2(predicted_ec+0.39661671, 3);
-    jTextView42.Text := 'EC = ' + FloattoStr(predicted_ec) + ' mS/cm';
+    // limiting molar conductivity model
+      if jRadioGroup5.CheckedIndex = 0 then
+      begin
+
+        // calculate ionic strength used for conductivity model
+        ionic_strength := 0;
+        for i := 0 to 14 do ionic_strength := zi[i]*zi[i]*(Result[i] /(1000*elements_molar_mass[i])) + ionic_strength;
+
+        ec_contribution[0]  := (71.46);
+        ec_contribution[1] := (73.5);
+        ec_contribution[2]  := (57);
+        ec_contribution[3]  := (73.5);
+        ec_contribution[4]  :=(119);
+        ec_contribution[5]  := (106);
+        ec_contribution[6]  := (160);
+        ec_contribution[7]  := (108.0);
+        ec_contribution[8]  := 0;
+        ec_contribution[9]  := 0;
+        ec_contribution[10]  := 0;
+        ec_contribution[11] := 0;
+        ec_contribution[12] := 0;
+        ec_contribution[13] := (50.01);
+        ec_contribution[14] := (76.35);
+        ec_contribution[15] := 0;
+
+        predicted_ec := 0;
+        for i := 0 to 14 do
+        begin
+           predicted_ec := (Result[i]/elements_molar_mass[i]) * ec_contribution[i] * exp(-0.7025187*sqrt(ionic_strength)*power(zi[i],1.5)) + predicted_ec;
+        end;
+        predicted_ec := predicted_ec/1000;
+      end;
+
+    if jRadioGroup5.CheckedIndex = 1 then
+    begin
+        ec_contribution[0]  := 0.403791;
+        ec_contribution[1] := -0.308967;
+        ec_contribution[2]  := 0.142525;
+        ec_contribution[3]  := -0.110791;
+        ec_contribution[4]  := -0.283549;
+        ec_contribution[5]  := -0.358782;
+        ec_contribution[6]  := 0.276118;
+        ec_contribution[7]  := 0.0;
+        ec_contribution[8]  := 0.0;
+        ec_contribution[9]  := 0.0;
+        ec_contribution[10]  := 0.0;
+        ec_contribution[11] := 0.0;
+        ec_contribution[12] := 0.0;
+        ec_contribution[13] := 0.0;
+        ec_contribution[14] := 0.0;
+        ec_contribution[15] := 0.0;
+
+        predicted_ec := 0.0;
+        for i := 0 to 15 do
+        begin
+          predicted_ec := (Result[i] * ec_contribution[i]) + predicted_ec;
+        end;
+        predicted_ec := predicted_ec+0.39661671;
+    end;
+
+    jTextView42.Text := 'EC = ' + FloattoStr(round2(predicted_ec, 3)) + ' mS/cm';
 
     jActionBarTab1.SelectTabByIndex(6);
 
@@ -1081,7 +1027,6 @@ var
   begin
 
       // variable initializations
-      varcount := 15; // the variable count represents the number of elements minus one degree of freedom
       problem_matrix_left := nil ;
       problem_matrix_right := nil ;
       all_element_contributions := nil;
@@ -1091,22 +1036,45 @@ var
       conc_factor := StrToFloat(jEditText37.Text);
       all_element_targets := nil;
       SetLength(ec_contribution, 16);
+      varcount := 0;
 
       if jRadioGroup1.CheckedIndex = 1 then volume := volume*3.78541;
 
       // if this is set to mM change to ppm for calculation
       if jRadioGroup3.CheckedIndex = 1 then jRadioGroup3.CheckedIndex :=0 ;
 
-      SetLength(varnames, 15);
-      SetLength(vartargetvalue, 15);
+      SetLength(varnames, 0);
+      SetLength(vartargetvalue, 0);
       SetLength(all_element_targets, 16);
 
       j := 0;
 
       for i := 0 to 15 do
       begin
-           if elements[i] <> degree_of_freedom then
+
+           if elements[i] = 'N_NO3' then all_element_targets[i] := StrToFloat(jEditText1.Text);
+           if elements[i] = 'N_NH4' then all_element_targets[i] := StrToFloat(jEditText2.Text);
+           if elements[i] = 'P' then all_element_targets[i] := StrToFloat(jEditText3.Text);
+           if elements[i] = 'K' then all_element_targets[i] := StrToFloat(jEditText4.Text);
+           if elements[i] = 'Ca' then all_element_targets[i] := StrToFloat(jEditText5.Text);
+           if elements[i] = 'Mg' then all_element_targets[i] := StrToFloat(jEditText6.Text);
+           if elements[i] = 'S' then all_element_targets[i] := StrToFloat(jEditText7.Text);
+           if elements[i] = 'Fe' then all_element_targets[i] := StrToFloat(jEditText8.Text);
+           if elements[i] = 'Mn' then all_element_targets[i] := StrToFloat(jEditText9.Text);
+           if elements[i] = 'B' then all_element_targets[i] := StrToFloat(jEditText10.Text);
+           if elements[i] = 'Zn' then all_element_targets[i] := StrToFloat(jEditText11.Text);
+           if elements[i] = 'Cu' then all_element_targets[i] := StrToFloat(jEditText12.Text);
+           if elements[i] = 'Mo' then all_element_targets[i] := StrToFloat(jEditText13.Text);
+           if elements[i] = 'Na' then all_element_targets[i] := StrToFloat(jEditText14.Text);
+           if elements[i] = 'Cl' then all_element_targets[i] := StrToFloat(jEditText15.Text);
+           if elements[i] = 'Si' then all_element_targets[i] := StrToFloat(jEditText16.Text);
+
+           if (elements[i] <> degree_of_freedom) and (all_element_targets[i] > 0) then
            begin
+                varcount := varcount+1;
+                SetLength(varnames, Length(varnames)+1);
+                SetLength(vartargetvalue, Length(vartargetvalue)+1);
+
                 varnames[j] := elements[i];
                 if elements[i] = 'N_NO3' then vartargetvalue[j] := StrToFloat(jEditText1.Text);
                 if elements[i] = 'N_NH4' then vartargetvalue[j] := StrToFloat(jEditText2.Text);
@@ -1130,23 +1098,6 @@ var
 
                 j := j+1;
            end;
-
-           if elements[i] = 'N_NO3' then all_element_targets[i] := StrToFloat(jEditText1.Text);
-           if elements[i] = 'N_NH4' then all_element_targets[i] := StrToFloat(jEditText2.Text);
-           if elements[i] = 'P' then all_element_targets[i] := StrToFloat(jEditText3.Text);
-           if elements[i] = 'K' then all_element_targets[i] := StrToFloat(jEditText4.Text);
-           if elements[i] = 'Ca' then all_element_targets[i] := StrToFloat(jEditText5.Text);
-           if elements[i] = 'Mg' then all_element_targets[i] := StrToFloat(jEditText6.Text);
-           if elements[i] = 'S' then all_element_targets[i] := StrToFloat(jEditText7.Text);
-           if elements[i] = 'Fe' then all_element_targets[i] := StrToFloat(jEditText8.Text);
-           if elements[i] = 'Mn' then all_element_targets[i] := StrToFloat(jEditText9.Text);
-           if elements[i] = 'B' then all_element_targets[i] := StrToFloat(jEditText10.Text);
-           if elements[i] = 'Zn' then all_element_targets[i] := StrToFloat(jEditText11.Text);
-           if elements[i] = 'Cu' then all_element_targets[i] := StrToFloat(jEditText12.Text);
-           if elements[i] = 'Mo' then all_element_targets[i] := StrToFloat(jEditText13.Text);
-           if elements[i] = 'Na' then all_element_targets[i] := StrToFloat(jEditText14.Text);
-           if elements[i] = 'Cl' then all_element_targets[i] := StrToFloat(jEditText15.Text);
-           if elements[i] = 'Si' then all_element_targets[i] := StrToFloat(jEditText16.Text);
       end;
 
 
@@ -1329,9 +1280,8 @@ var
         predicted_ec := 0;
         for i := 0 to 14 do
         begin
-          predicted_ec := (Result[i]/1000*elements_molar_mass[i]) * ec_contribution[i] * power(power(e,-Ln(10)*0.5085*zi[i]*zi[i]*sqrt(ionic_strength)),(0.6/sqrt(zi[i]))) + predicted_ec;
+          predicted_ec := (Result[i]/elements_molar_mass[i]) * ec_contribution[i] * exp(-0.7025187*sqrt(ionic_strength)*power(zi[i],1.5)) + predicted_ec;
         end;
-
         predicted_ec := predicted_ec/1000;
       end;
 
